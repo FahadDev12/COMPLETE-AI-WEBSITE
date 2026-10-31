@@ -1,0 +1,55 @@
+SHOPEASY — AUDITED DEVELOPMENT BUILD
+
+LOCAL DEVELOPMENT
+1. Install Python 3.11+ (3.12 recommended).
+2. Create a virtual environment: python -m venv .venv
+3. Activate it and run: pip install -r requirements.txt
+4. Copy .env.example to .env, then set a strong SECRET_KEY and administrator credentials.
+5. Run: python app.py
+6. Browse http://127.0.0.1:5000
+
+ADMIN SETUP
+No default administrator account is created. Set ADMIN_EMAIL and ADMIN_PASSWORD before first startup. ADMIN_PASSWORD must contain at least 14 characters. The published demo account is removed if it still uses its published default password. Existing customized administrator accounts are retained.
+
+IMPLEMENTED IN THIS BUILD
+- Storefront search, category browsing, product details, cart, and Cash on Delivery checkout.
+- Admin dashboard, product creation/edit/hide, order status updates, CSV export, and customer contact inbox.
+- CSRF validation on state-changing forms, session cookie hardening, security headers, login throttling, server-side checkout stock revalidation, and atomic order/stock transaction.
+- Environment-configured store contact details and production secret-key enforcement.
+
+IMPORTANT LIMITATIONS — NOT READY FOR LIVE COMMERCE
+- Cash on Delivery is the only implemented payment method. No card, JazzCash, Easypaisa, bank transfer, payment webhook or refund integration exists.
+- No customer accounts, order tracking portal, shipping/courier integration, coupons, reviews, returns workflow, or automated email/SMS notifications.
+- Contact messages are stored in SQLite and shown in admin; outbound email delivery is not configured.
+- SQLite is suitable for a small single-instance deployment, not horizontally scaled production traffic. Use managed PostgreSQL for production and implement a formal migration process before launch.
+- Backups, restore drills, monitoring, HTTPS termination, WSGI process manager and hosting configuration are operator responsibilities.
+- Product images are external URLs. No upload feature is provided.
+- Configure real business contact details, privacy policy, terms, delivery/return policy, taxes and legal requirements before launch.
+
+ENVIRONMENT VARIABLES
+See .env.example. The application loads a local .env file. Never commit real secrets. APP_ENV=production requires SECRET_KEY and enables Secure session cookies. Deploy behind HTTPS.
+
+TESTS
+After installing requirements, run: python -m unittest discover -s tests -v
+
+
+NEW FEATURES IN THIS BUILD
+- Dashboard sidebar has its own scroll area and larger text.
+- All workspace options are listed on /admin/workspace.
+- Dashboard overview includes an animated ShopEasy helper character.
+- Product creation supports multiple local image uploads and drag/drop. Product pages show thumbnails and click-to-zoom.
+- Customer accounts are available at /account/register and /account/login. Customer login uses an email one-time code as the second factor.
+- Order confirmation, dispatch, and out-for-delivery emails are sent when SMTP is configured. Out-for-delivery email asks Cash on Delivery customers to prepare the payment.
+- Email send attempts/results are shown in the admin Email tracking section.
+
+EMAIL SETUP
+1. Copy .env.example to .env.
+2. Fill SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASSWORD, and SMTP_FROM using credentials from your email provider.
+3. Restart the website. Test with an email address you can access.
+4. If SMTP is not configured, the dashboard records not_configured and customer email verification cannot be completed.
+
+CUSTOMER 2-STEP SIGN-IN
+Customers create an account, enter their email and password, then enter the six-digit code sent to their email. Codes expire after 10 minutes and are limited to five attempts.
+
+
+See UPGRADE_NOTES.md for the full feature list, email configuration, testing status and production limitations.
